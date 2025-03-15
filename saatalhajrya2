@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساعة الحجرية - أوقات الصلاة</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #clock { font-size: 40px; margin: 20px; }
+        #prayer-times { font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>ساعة الحجرية - الرستاق</h1>
+    <div id="clock"></div>
+    <h2>أوقات الصلاة في الرستاق</h2>
+    <div id="prayer-times">تحميل...</div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById("clock").innerText = now.toLocaleTimeString("ar-SA");
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // جلب أوقات الصلاة من API
+        fetch("https://api.aladhan.com/v1/timingsByCity?city=Rustaq&country=Oman&method=2")
+            .then(response => response.json())
+            .then(data => {
+                const timings = data.data.timings;
+                document.getElementById("prayer-times").innerHTML = `
+                    الفجر: ${timings.Fajr} <br>
+                    الشروق: ${timings.Sunrise} <br>
+                    الظهر: ${timings.Dhuhr} <br>
+                    العصر: ${timings.Asr} <br>
+                    المغرب: ${timings.Maghrib} <br>
+                    العشاء: ${timings.Isha}
+                `;
+            })
+            .catch(error => {
+                document.getElementById("prayer-times").innerText = "تعذر تحميل أوقات الصلاة.";
+                console.error("Error fetching prayer times:", error);
+            });
+    </script>
+
+</body>
+</html>
