@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساعة الحجرية</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: white;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/2/2b/Rustaq_Fort.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        h1 { margin-top: 20px; font-size: 40px; background: rgba(0, 0, 0, 0.6); padding: 10px; display: inline-block; border-radius: 10px; }
+        #clock { font-size: 50px; margin: 20px; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 10px; display: inline-block; }
+        #date { font-size: 25px; margin: 10px; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 10px; display: inline-block; }
+        #dhikr { font-size: 30px; margin: 20px; background: rgba(0, 0, 0, 0.6); padding: 10px; border-radius: 10px; display: inline-block; }
+        .clock-container { position: relative; width: 300px; height: 300px; margin: auto; }
+        .clock-face { width: 100%; height: 100%; background: url('https://i.imgur.com/UGbVvqH.png') no-repeat center center; background-size: contain; position: absolute; }
+        .hand {
+            position: absolute;
+            width: 50%;
+            height: 6px;
+            background: red;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+        }
+        .minute { height: 4px; background: white; }
+        .hour { height: 6px; background: yellow; width: 30%; }
+    </style>
+</head>
+<body>
+
+    <h1>📌 ساعة الحجرية</h1>
+    
+    <div id="clock"></div>
+    <div class="clock-container">
+        <div class="clock-face"></div>
+        <div class="hand hour" id="hour-hand"></div>
+        <div class="hand minute" id="minute-hand"></div>
+        <div class="hand" id="second-hand"></div>
+    </div>
+
+    <div id="date">تحميل التاريخ...</div>
+    <div id="dhikr">سبحان الله</div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            document.getElementById("clock").innerText = now.toLocaleTimeString("ar-SA");
+
+            const hourDeg = ((hours % 12) + minutes / 60) * 360 / 12;
+            const minuteDeg = (minutes + seconds / 60) * 360 / 60;
+            const secondDeg = seconds * 360 / 60;
+
+            document.getElementById("hour-hand").style.transform = `rotate(${hourDeg}deg)`;
+            document.getElementById("minute-hand").style.transform = `rotate(${minuteDeg}deg)`;
+            document.getElementById("second-hand").style.transform = `rotate(${secondDeg}deg)`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const hijriOptions = { calendar: 'islamic-umalqura', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("date").innerHTML = `📅 ${now.toLocaleDateString("ar-SA", options)}<br>🕌 ${now.toLocaleDateString("ar-SA", hijriOptions)}`;
+        }
+        updateDate();
+
+        const adhkar = ["سبحان الله", "الحمد لله", "لا إله إلا الله"];
+        let dhikrIndex = 0;
+        function updateDhikr() {
+            document.getElementById("dhikr").innerText = adhkar[dhikrIndex];
+            dhikrIndex = (dhikrIndex + 1) % adhkar.length;
+        }
+        setInterval(updateDhikr, 10000);
+    </script>
+
+</body>
+</html>
