@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساعة الحجرية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .clock {
+            font-size: 3rem;
+            margin: 20px;
+        }
+        .date {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>ساعة الحجرية</h1>
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="date" id="date"></div>
+    <script>
+        function updateClock() {
+            let now = new Date();
+            let optionsTime = { timeZone: 'Asia/Muscat', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            let timeString = new Intl.DateTimeFormat('ar-EG', optionsTime).format(now);
+
+            let optionsDate = { timeZone: 'Asia/Muscat', day: 'numeric', month: 'long', year: 'numeric' };
+            let gregorianDate = new Intl.DateTimeFormat('ar-EG', optionsDate).format(now);
+            let hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', optionsDate).format(now);
+
+            document.getElementById('clock').textContent = timeString;
+            document.getElementById('date').innerHTML = `الميلادي: ${gregorianDate} <br> الهجري: ${hijriDate}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
